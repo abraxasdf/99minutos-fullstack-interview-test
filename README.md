@@ -1,3 +1,3 @@
 
-# GIT BRANCH ORIGINAL 
-## commit 2
+# GIT BRANCH 2 
+## commit 1
