@@ -39,8 +39,7 @@ class PRComp extends Component {
       } else{}
     }) 
     .then((responseJson) => {  
-      this.setState({ databranches: responseJson , branchbase: responseJson[0].name, branchhead: responseJson[0].name });  
-      console.log('fetch branches:', responseJson)
+      this.setState({ databranches: responseJson , branchbase: responseJson[0].name, branchhead: responseJson[0].name });   
     }) 
     .catch((error) =>{});
           
@@ -52,32 +51,23 @@ class PRComp extends Component {
     }) 
     .then((responseJson) => {  
       this.setState({ datapr: responseJson });  
-      console.log('fetch pullrequest:', responseJson)
     }) 
     .catch((error) =>{});
   } 
 
   CreatePR(){ //Creacion del pull request
-    let that= this;
-    console.log('CreatePR data:')
-    console.log('this.state.form.title:'+this.state.form.title)
-    console.log('this.state.form.description:'+this.state.form.description) 
-    console.log('this.state.branchbase:'+this.state.branchbase)
-    console.log('this.state.branchhead:'+this.state.branchhead)
-    if(this.state.branchbase===this.state.branchhead){ 
-      console.log('Error no elegir la misma head y base') 
+    let that= this; 
+    if(this.state.branchbase===this.state.branchhead){  
       this.setState({ alert: true, alertmsg: 'Error no elegir la misma head y base' });  
       setTimeout(function(){ that.setState({ alert: false, alertmsg: '' });  }, 2000);  
       return false;
     }  
-    if(this.state.form.title.length<1){ 
-      console.log('Error debe tener un titulo') 
+    if(this.state.form.title.length<1){  
       this.setState({ alert: true, alertmsg: 'Error debe tener un titulo' });  
       setTimeout(function(){ that.setState({ alert: false, alertmsg: '' });  }, 2000);  
       return false;
     } 
-    if(this.state.form.description.length<1){ 
-      console.log('Error debe tener una descripción') 
+    if(this.state.form.description.length<1){  
       this.setState({ alert: true, alertmsg: 'Error debe tener una descripción' });  
       setTimeout(function(){ that.setState({ alert: false, alertmsg: '' });  }, 2000);  
       return false;
@@ -92,8 +82,7 @@ class PRComp extends Component {
       body: '{ "title": "'+this.state.form.title+'", "body": "'+this.state.form.description+'", "head": "'+this.state.branchhead+'", "base": "'+this.state.branchbase+'" }'
     })
     .then((response) => response.json())
-    .then((responseJson) => { 
-      console.log('post pullcreate:', responseJson) 
+    .then((responseJson) => {  
       fetch('https://api.github.com/repos/abraxasdf/99minutos-fullstack-interview-test/pulls?state=all',{})
       .then((response) => {
         if (response.status === 200) {
@@ -101,8 +90,7 @@ class PRComp extends Component {
         } else {}
       }) 
       .then((responseJson) => {  
-        this.setState({ datapr: responseJson });  
-        console.log('fetch pullrequest:', responseJson)
+        this.setState({ datapr: responseJson });   
         this.forceUpdate();
       }) 
       .catch((error) =>{});
@@ -132,10 +120,8 @@ class PRComp extends Component {
       }, 
     })
     .then((response) => response.json())
-    .then((responseJson) => { 
-      console.log('merge pullrequest:', responseJson)  
-      if(responseJson.message=="Pull Request is not mergeable"){
-        console.log('Error: Pull Request is not mergeable')
+    .then((responseJson) => {   
+      if(responseJson.message=="Pull Request is not mergeable"){ 
         this.setState({ alert: true, alertmsg: 'Error: Pull Request is not mergeable' });  
         setTimeout(function(){ that.setState({ alert: false, alertmsg: '' });  }, 2000); 
       }
@@ -153,8 +139,7 @@ class PRComp extends Component {
       body: '{ "title": "'+_title+'", "body": "'+_desc+'", "state": "closed", "base": "'+_base+'" }'
     })
     .then((response) => response.json())
-    .then((responseJson) => { 
-      console.log('close pullrequest:', responseJson)  
+    .then((responseJson) => {  
     })
     .catch((error) =>{}); 
   }
