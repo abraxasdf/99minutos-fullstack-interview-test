@@ -39,14 +39,12 @@ class BranchesComp extends Component {
         } else {}
       }) 
       .then((responseJson) => {  
-        this.setState({ datacommits: responseJson });  
-        console.log('fetch commits:', responseJson)
+        this.setState({ datacommits: responseJson });   
       }) 
       .catch((error) =>{});
   }
 
-  selectCommit(_sha){ //Carga todas los detalles de este commit
-    console.log('selectCommit:', _sha) 
+  selectCommit(_sha){ //Carga todas los detalles de este commit 
     var url= 'https://api.github.com/repos/abraxasdf/99minutos-fullstack-interview-test/commits/'+_sha;
     return fetch(url,{})
       .then((response) => {
@@ -55,8 +53,7 @@ class BranchesComp extends Component {
         } else {}
       }) 
       .then((responseJson) => {  
-        this.setState({ selectedcommit: responseJson });  
-        console.log('fetch specific commit:', responseJson)
+        this.setState({ selectedcommit: responseJson });   
       }) 
       .catch((error) =>{});
   }
