@@ -6,7 +6,7 @@ class BranchesComp extends Component {
   constructor(props){
     super(props)
     this.state = { 
-      data: [],
+      data_branches: [],
       datacommits: [],
       selectedcommit: [],
     }
@@ -17,24 +17,21 @@ class BranchesComp extends Component {
 
   componentWillMount(){}
   
-  componentDidMount(){ 
-    return fetch('https://api.github.com/repos/abraxasdf/99minutos-fullstack-interview-test/branches',{})
+  componentDidMount(){ //Carga todas las branches de este repositorio
+    return fetch('https://api.github.com/repos/abraxasdf/99minutos-fullstack-interview-test/branches',{}) 
       .then((response) => {
         if (response.status === 200) {
           return response.json();
         } else {}
       }) 
       .then((responseJson) => {  
-        this.setState({ data: responseJson });  
-        console.log('fetch branches:', responseJson)
+        this.setState({ data_branches: responseJson });  
       }) 
       .catch((error) =>{});
   } 
 
-  openBranch(_sha,_index){
-    console.log('openBranch:', _sha) 
-    console.log('_index:', _index) 
-    var url= 'https://api.github.com/repos/abraxasdf/99minutos-fullstack-interview-test/commits?sha='+_sha;
+  openBranch(_sha,_index){  //Carga todas los commits de este branch
+    var url= 'https://api.github.com/repos/abraxasdf/99minutos-fullstack-interview-test/commits?sha='+_sha; 
     return fetch(url,{})
       .then((response) => {
         if (response.status === 200) {
@@ -48,7 +45,7 @@ class BranchesComp extends Component {
       .catch((error) =>{});
   }
 
-  selectCommit(_sha){
+  selectCommit(_sha){ //Carga todas los detalles de este commit
     console.log('selectCommit:', _sha) 
     var url= 'https://api.github.com/repos/abraxasdf/99minutos-fullstack-interview-test/commits/'+_sha;
     return fetch(url,{})
@@ -82,10 +79,10 @@ class BranchesComp extends Component {
             <FlatList 
               ref="listRef"
               style={ styles.branchesflatlist }
-              data={this.state.data}
+              data={this.state.data_branches}
               keyExtractor={(item, index) => index.toString()} 
               renderItem={({ item,index }) =>
-                <TouchableWithoutFeedback   onPress={() => this.openBranch(`${item.commit.sha}`,`${index}`)} >
+                <TouchableWithoutFeedback key={index}  onPress={() => this.openBranch(`${item.commit.sha}`,`${index}`)} >
                   <View style={styles.individual_branch}> 
                     <Text  style={styles.individual_branch_txt_1}>{item.name}</Text> 
                   </View>
@@ -98,8 +95,8 @@ class BranchesComp extends Component {
               style={ styles.commitsflatlist }
               data={this.state.datacommits}
               keyExtractor={(item, index) => index.toString()} 
-              renderItem={({ item }) =>
-                <TouchableWithoutFeedback   onPress={() => this.selectCommit(`${item.sha}`)} >
+              renderItem={({ item, index }) =>
+                <TouchableWithoutFeedback key={index}  onPress={() => this.selectCommit(`${item.sha}`)} >
                   <View style={styles.individual_branch}> 
                     <Text  style={styles.individual_commit_txt_1} >{'Nombre: '+item.author.login}</Text> 
                     <Text  style={styles.individual_commit_txt_1} >{'Message: '+item.commit.message}</Text>  
@@ -161,6 +158,7 @@ const styles = StyleSheet.create ({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#888a8c',
+    overflow: 'auto'
   },
   individual_branchtxt:{
     fontSize: '1.5rem',
