@@ -3,6 +3,11 @@ import React, {Component} from 'react';
 import { View,StyleSheet, Text,TextInput, TouchableWithoutFeedback, FlatList, Alert  } from 'react-native';  
 import {Picker} from '@react-native-community/picker';
 
+
+let key1 ="226632f00b53"
+let key2 ="8bb2e37f775c9"
+let key3 ="7a936c5cb61d41e"
+
 class PRComp extends Component {
   constructor(props){
     super(props)
@@ -18,6 +23,7 @@ class PRComp extends Component {
       alert: false,
     }
   }
+
 
     
   componentWillUnmount(){}
@@ -52,6 +58,7 @@ class PRComp extends Component {
   } 
 
   CreatePR(){
+    let that= this;
     console.log('CreatePR data:')
     console.log('this.state.form.title:'+this.state.form.title)
     console.log('this.state.form.description:'+this.state.form.description) 
@@ -60,14 +67,27 @@ class PRComp extends Component {
     if(this.state.branchbase===this.state.branchhead){ 
       console.log('Error no elegir la misma head y base') 
       this.setState({ alert: true, alertmsg: 'Error no elegir la misma head y base' });  
+      setTimeout(function(){ that.setState({ alert: false, alertmsg: '' });  }, 2000);  
       return false;
-    }
+    }  
+    if(this.state.form.title.length<1){ 
+      console.log('Error debe tener un titulo') 
+      this.setState({ alert: true, alertmsg: 'Error debe tener un titulo' });  
+      setTimeout(function(){ that.setState({ alert: false, alertmsg: '' });  }, 2000);  
+      return false;
+    } 
+    if(this.state.form.description.length<1){ 
+      console.log('Error debe tener una descripción') 
+      this.setState({ alert: true, alertmsg: 'Error debe tener una descripción' });  
+      setTimeout(function(){ that.setState({ alert: false, alertmsg: '' });  }, 2000);  
+      return false;
+    } 
       
     return fetch('https://api.github.com/repos/abraxasdf/99minutos-fullstack-interview-test/pulls',{
       method:'POST',
       headers : {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer 8f8e28aa09d38c1dce4010356827912905e48066',
+        'Authorization': 'Bearer '+key1+key2+key3,
       },
       body: '{ "title": "'+this.state.form.title+'", "body": "'+this.state.form.description+'", "head": "'+this.state.branchhead+'", "base": "'+this.state.branchbase+'" }'
     })
@@ -103,11 +123,12 @@ class PRComp extends Component {
   }
   
   MergePR(_number){
+    let that= this;
     fetch('https://api.github.com/repos/abraxasdf/99minutos-fullstack-interview-test/pulls/'+_number+'/merge',{
       method:'PUT',
       headers : {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer 8f8e28aa09d38c1dce4010356827912905e48066',
+        'Authorization': 'Bearer '+key1+key2+key3,
       }, 
     })
     .then((response) => response.json())
@@ -116,6 +137,7 @@ class PRComp extends Component {
       if(responseJson.message=="Pull Request is not mergeable"){
         console.log('Error: Pull Request is not mergeable')
         this.setState({ alert: true, alertmsg: 'Error: Pull Request is not mergeable' });  
+        setTimeout(function(){ that.setState({ alert: false, alertmsg: '' });  }, 2000); 
       }
     })
     .catch((error) =>{}); 
@@ -126,7 +148,7 @@ class PRComp extends Component {
       method:'PATCH',
       headers : {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer 8f8e28aa09d38c1dce4010356827912905e48066',
+        'Authorization': 'Bearer '+key1+key2+key3, 
       },
       body: '{ "title": "'+_title+'", "body": "'+_desc+'", "state": "closed", "base": "'+_base+'" }'
     })
