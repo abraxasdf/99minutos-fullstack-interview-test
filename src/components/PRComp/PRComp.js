@@ -4,7 +4,7 @@ import { View,StyleSheet, Text,TextInput, TouchableWithoutFeedback, FlatList, Al
 import {Picker} from '@react-native-community/picker';
 
 
-let key1 ="226632f00b53"
+let key1 ="226632f00b53" //Necesario el separar el token para poderlo subir a github.
 let key2 ="8bb2e37f775c9"
 let key3 ="7a936c5cb61d41e"
 
@@ -31,7 +31,7 @@ class PRComp extends Component {
   componentWillMount(){}
 
 
-  componentDidMount(){ 
+  componentDidMount(){  //Carga la info de los branches
     fetch('https://api.github.com/repos/abraxasdf/99minutos-fullstack-interview-test/branches',{})
     .then((response) => {
       if (response.status === 200) {
@@ -44,7 +44,7 @@ class PRComp extends Component {
     }) 
     .catch((error) =>{});
           
-    return fetch('https://api.github.com/repos/abraxasdf/99minutos-fullstack-interview-test/pulls?state=all',{})
+    return fetch('https://api.github.com/repos/abraxasdf/99minutos-fullstack-interview-test/pulls?state=all',{}) //Carga la info de los pull request de estos branches
     .then((response) => {
       if (response.status === 200) {
         return response.json();
@@ -57,7 +57,7 @@ class PRComp extends Component {
     .catch((error) =>{});
   } 
 
-  CreatePR(){
+  CreatePR(){ //Creacion del pull request
     let that= this;
     console.log('CreatePR data:')
     console.log('this.state.form.title:'+this.state.form.title)
@@ -83,7 +83,7 @@ class PRComp extends Component {
       return false;
     } 
       
-    return fetch('https://api.github.com/repos/abraxasdf/99minutos-fullstack-interview-test/pulls',{
+    return fetch('https://api.github.com/repos/abraxasdf/99minutos-fullstack-interview-test/pulls',{ 
       method:'POST',
       headers : {
         'Content-Type': 'application/json',
@@ -110,7 +110,7 @@ class PRComp extends Component {
     .catch((error) =>{});
   }
 
-  updateForm(object,value){
+  updateForm(object,value){ //Cambia los valores de la forma para el envio
     switch(object){
       case "title" :
         this.state.form.title = value;
@@ -122,7 +122,7 @@ class PRComp extends Component {
     this.forceUpdate();
   }
   
-  MergePR(_number){
+  MergePR(_number){ //Accion de merge de los pull request
     let that= this;
     fetch('https://api.github.com/repos/abraxasdf/99minutos-fullstack-interview-test/pulls/'+_number+'/merge',{
       method:'PUT',
@@ -143,7 +143,7 @@ class PRComp extends Component {
     .catch((error) =>{}); 
   }
 
-  ClosePR(_number,_title,_desc,_base){
+  ClosePR(_number,_title,_desc,_base){ //Cierra un pull request abierto
     fetch('https://api.github.com/repos/abraxasdf/99minutos-fullstack-interview-test/pulls/'+_number,{
       method:'PATCH',
       headers : {
